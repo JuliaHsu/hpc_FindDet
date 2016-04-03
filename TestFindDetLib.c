@@ -6,6 +6,8 @@
 #include "mpfr.h"
 #define size 5000
 int main(){
+    double START,END;
+    START=clock();
     double max;
     double tmp;
     double resDet;
@@ -32,10 +34,6 @@ int main(){
     for(i=0;i<size;i++){
         for(j=0;j<size;j++){
             fread(buffer+(size*i+j),sizeof(double),1,datafile);
-        }
-    }
-    for(i=0;i<size;i++){
-        for(j=0;j<size;j++){
             printf("%lf\t",*(buffer+(size*i+j)));
         }
         printf("\n");
@@ -94,7 +92,7 @@ int main(){
     printf("det= %e\n",resDet);
     mpfr_printf("log(abs(det))= %Fe\n",logAbsDet);
     //gmp_printf("log(abs(det)= %e\n",logAbsDet);
-    double END = clock();
+    END = clock();
     printf("%f\n",END/CLOCKS_PER_SEC);
 
     mpfr_clear(det);
