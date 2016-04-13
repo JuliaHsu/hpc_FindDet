@@ -15,6 +15,7 @@ double START,END;
 int consK=10;
 double detK;
 int main(){
+    START = clock();
     int i,j,k;
     double* matrix;
   //  printf("n= \n");
@@ -96,7 +97,7 @@ int main(){
     printf("det= %e\n",det);
     printf("log(abs(det)= %e\n",logAbsDet);
     END=clock();
-    printf("%f",END/CLOCKS_PER_SEC);
+    printf("%f",(END-START)/CLOCKS_PER_SEC);
     free(matrix);
     return 0;
 }

@@ -5,6 +5,7 @@
 #include <math.h>
 #include "mpfr.h"
 #define size 5000
+
 int main(){
     double START,END;
     START=clock();
@@ -15,15 +16,14 @@ int main(){
     double mulTmp; 
     mpfr_t tmp1;
     mpfr_t tmp2;
-    mpfr_t logAbsDet;
     int i,j,k,maxRow,sign;
     char f_name[50];
+    double logAbsDet;
     double* buffer;
+    buffer = malloc(size*size*sizeof(double));
     mpfr_init(det);
     mpfr_init(tmp1);
     mpfr_init(tmp2);
-    mpfr_init(logAbsDet);
-    buffer = malloc(size*size*sizeof(double));
     sprintf(f_name,"m5000x5000.bin");
     FILE *datafile=fopen(f_name,"rb");
     for(i=0;i<size;i++){
@@ -72,33 +72,27 @@ int main(){
     for(i=0;i<size;i++){
         mpfr_set_d(tmp2,*(buffer+size*i+i),GMP_RNDN);
         mpfr_mul(tmp1,tmp2,tmp1,GMP_RNDN);
+        logAbsDet=logAbsDet+log10(fabs(*(buffer+size*i+i)));
     }
     if(sign%2==0){
         mpfr_set(det,tmp1,GMP_RNDN);
         resDet=mpfr_get_d(det,GMP_RNDN);
-        mpfr_log10(logAbsDet,det,GMP_RNDN);
     }
     else{
         mpfr_neg(tmp1,tmp1,GMP_RNDN);
         mpfr_set(det,tmp1,GMP_RNDN);
 
         resDet=mpfr_get_d(det,GMP_RNDN);
-        mpfr_log10(logAbsDet,det,GMP_RNDN);
     }
 
-    //mpf_abs(absDet,det);
-    //    mpf_set(logAbsDet, mpfr_log10(absDet));
-   // mpfr_printf("det= %Fe\n",det);
     printf("det= %e\n",resDet);
-    mpfr_printf("log(abs(det))= %Fe\n",logAbsDet);
-    //gmp_printf("log(abs(det)= %e\n",logAbsDet);
+    printf("log(abs(det)= %e\n",logAbsDet);
     END = clock();
-    printf("%f\n",END/CLOCKS_PER_SEC);
+    printf("%f\n",(END-START)/CLOCKS_PER_SEC);
 
     mpfr_clear(det);
     mpfr_clear(tmp1);
     mpfr_clear(tmp2);
-    mpfr_clear(logAbsDet);
     free(buffer);
     return 0;
 }
